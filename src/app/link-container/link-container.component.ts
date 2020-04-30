@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LinkButtonComponent } from '../link-button/link-button.component';
+import { WikipediaService } from '../wikipedia-service.service';
 
 @Component({
   selector: 'app-link-container',
@@ -10,8 +11,9 @@ export class LinkContainerComponent implements OnInit {
 
   buttons = Array<LinkButtonComponent>();
   CurrentArticle: string;
-  constructor() { 
-    this.CurrentArticle = "Article"
+  constructor(wikiServer : WikipediaService) { 
+    this.CurrentArticle = "Article";
+    wikiServer.getRandomArticle();
   }
 
   ngOnInit() {

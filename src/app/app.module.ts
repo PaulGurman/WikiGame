@@ -5,6 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LinkButtonComponent } from './link-button/link-button.component';
 import { LinkContainerComponent } from './link-container/link-container.component';
+import { WikipediaService } from './wikipedia-service.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -14,9 +16,10 @@ import { LinkContainerComponent } from './link-container/link-container.componen
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [WikipediaService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
