@@ -1,0 +1,12 @@
+<table>
+    <thead>
+        {{CurrentArticle}}
+    </thead>
+    <tbody>
+        <div class="linkContainer">
+            <tr *ngFor="let button of buttons; let i = index">
+                <app-link-button (index)="SelectionMade(i)" [Content]=i ></app-link-button>
+            </tr>
+        </div>
+    </tbody>
+</table>

@@ -1,0 +1,15 @@
+.GameDisplay{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items:baseline;
+}
+
+.GoalArticleInformation{
+    display: flex;
+    flex-direction: column;
+}
+
+#GoalDescription{
+    border: thick;
+}
