@@ -15,7 +15,6 @@ export class LinkButtonComponent {
 
   OnClick(i : any) {
     this.index.emit(i);
-    this.Content = "Ah";
   }
 
 }

@@ -8,23 +8,36 @@ import { catchError, retry } from 'rxjs/operators';
 })
 export class WikipediaService {
 
-  random_url: string = "https://en.wikipedia.org/w/api.php"; 
+  url: string = "https://en.wikipedia.org/w/api.php"; 
 
-  params = {
+  randomparams = {
       action: "query",
       format: "json",
-      list: "random",
-      rnlimit: "1"
+      generator: "random",
+      grnnamespace: "0",
+      prop: "revisions|images",
+      rvprop: "content",
+      grnlimit: "1"
   };
   
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {  }
 
   getRandomArticle()
   {
-    var random = this.random_url;
-    var params = this.params;
+    var random = this.url;
+    var params = this.randomparams;
     random += "?origin=*";
-    Object.keys(this.params).forEach(function(key){random += "&" + key + "=" + params[key];});
-    console.log(this.http.get(random).subscribe((response : any) => {response.json}));
+    Object.keys(this.randomparams).forEach(function(key){random += "&" + key + "=" + params[key];});
+
+    return this.http.get(random);
   }
+
+  getLinks(title:string)
+  {
+    var query = "?origin=*&action=query&titles=" + encodeURIComponent(title) + "&" + "prop=links&pllimit=max&format=json";
+    console.log(this.url+query);
+    return this.http.get(this.url + query);
+  }
+
 }
+

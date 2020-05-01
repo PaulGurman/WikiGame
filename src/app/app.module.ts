@@ -7,12 +7,14 @@ import { LinkButtonComponent } from './link-button/link-button.component';
 import { LinkContainerComponent } from './link-container/link-container.component';
 import { WikipediaService } from './wikipedia-service.service';
 import { HttpClientModule } from '@angular/common/http';
+import { GameDisplayComponent } from './game-display/game-display.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LinkButtonComponent,
-    LinkContainerComponent
+    LinkContainerComponent,
+    GameDisplayComponent
   ],
   imports: [
     BrowserModule,
