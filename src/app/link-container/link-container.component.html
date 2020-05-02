@@ -3,7 +3,7 @@
         {{CurrentArticle}}
     </thead>
     <tbody>
-        <div class="linkContainer">
+        <div class="linkContainer" ng-disabled="true">
             <tr *ngFor="let button of buttons; let i = index">
                 <app-link-button (index)="SelectionMade(i)" [Content]="buttonContents[i]"></app-link-button>
             </tr>

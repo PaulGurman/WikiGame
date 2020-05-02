@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { Observable, throwError, EMPTY } from 'rxjs';
+import { catchError, retry, expand, toArray } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -28,16 +28,37 @@ export class WikipediaService {
     var params = this.randomparams;
     random += "?origin=*";
     Object.keys(this.randomparams).forEach(function(key){random += "&" + key + "=" + params[key];});
-
     return this.http.get(random);
   }
 
-  getLinks(title:string)
+  getArticleDescription(pageid:string)
   {
-    var query = "?origin=*&action=query&titles=" + encodeURIComponent(title) + "&" + "prop=links&pllimit=max&format=json";
-    console.log(this.url+query);
-    return this.http.get(this.url + query);
+    return this.http.get(this.url + "?origin=*&format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&pageids=" + pageid);
   }
 
+  getLinks(title:string, plcontinue:string = "")
+  {
+    var query = "?origin=*&action=query&titles=" + encodeURIComponent(title) + "&prop=links&pllimit=max&format=json" + plcontinue;
+    return this.http.get(this.url + query).pipe(
+      expand((response : WikiArticle) => {
+        if(response.batchcomplete != "")
+        {
+          return this.http.get(this.url + query + "&plcontinue=" + response.continue.plcontinue);
+        } else  
+        {
+          return EMPTY;
+        }
+      }), toArray()
+    );
+  }
+
+}
+
+interface WikiArticle{
+  query?: any;
+  batchcomplete?: any;
+  continue?: {
+    plcontinue? : string;
+  };
 }
 
