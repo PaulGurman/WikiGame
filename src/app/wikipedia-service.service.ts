@@ -28,7 +28,16 @@ export class WikipediaService {
     var params = this.randomparams;
     random += "?origin=*";
     Object.keys(this.randomparams).forEach(function(key){random += "&" + key + "=" + params[key];});
-    return this.http.get(random);
+    return this.http.get(random).pipe(
+      expand((response : WikiArticle) => {
+        var title : string;
+        Object.keys(response.query.pages).forEach((k) => title = response.query.pages[k].title);
+        if(title == null || title.match(new RegExp("(disambiguation)", "i"))){
+          return this.http.get(random);
+        }
+        return EMPTY; 
+      }), toArray()
+    );
   }
 
   getArticleDescription(pageid:string)

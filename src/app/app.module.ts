@@ -8,13 +8,15 @@ import { LinkContainerComponent } from './link-container/link-container.componen
 import { WikipediaService } from './wikipedia-service.service';
 import { HttpClientModule } from '@angular/common/http';
 import { GameDisplayComponent } from './game-display/game-display.component';
+import { EndGameDisplayComponent } from './end-game-display/end-game-display.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LinkButtonComponent,
     LinkContainerComponent,
-    GameDisplayComponent
+    GameDisplayComponent,
+    EndGameDisplayComponent
   ],
   imports: [
     BrowserModule,
