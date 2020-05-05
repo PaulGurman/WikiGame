@@ -13,10 +13,14 @@ export class LinkContainerComponent implements OnInit {
   @Input() GoalArticle: string;
   @ViewChild('filterInput', null) filterTerm: ElementRef;
 
+  // Arrays for buttons and buttonContents
   buttons = Array<LinkButtonComponent>();
   buttons_filtered = Array<LinkButtonComponent>();
   buttonContents = Array<string>();
   buttonContents_filtered = Array<string>();
+  
+  queryStack = Array<Array<any>>();
+
   CurrentArticle: string;
   WikiService: WikipediaService;
 
@@ -48,6 +52,7 @@ export class LinkContainerComponent implements OnInit {
         });
         this.buttonContents_filtered = this.buttonContents;
         this.buttons_filtered = this.buttons;
+        this.queryStack.push(this.buttons.slice(), this.buttonContents.slice());
       }));
     });
   }
@@ -59,6 +64,13 @@ export class LinkContainerComponent implements OnInit {
 
   SelectionMade(i: any)
   {
+    this.queryStack = [];
+
+    this.buttons = [];
+    this.buttonContents = [];
+
+    this.prevFilter = "";
+
     // Set current article to the content corresponding to the button
     this.CurrentArticle = this.buttonContents_filtered[i];
     this.filterTerm.nativeElement.value = '';
@@ -129,32 +141,41 @@ export class LinkContainerComponent implements OnInit {
           i++;
         }
       }
+
       this.buttonContents_filtered = this.buttonContents;
       this.buttons_filtered = this.buttons;
+
+      this.queryStack.push(this.buttons, this.buttonContents);
 
       this.searchInProgress = false;
     });
   }
 
+  prevFilter : string = '';
+
   FilterLinks(filter : string)
   {
-    this.buttonContents_filtered = [];
-    this.buttons_filtered = [];
-    if(filter == "")
+    if(this.prevFilter.length > filter.length)  // Are you backspacing? Then take the previous combo of buttons and contents, saves on time
     {
-      this.buttonContents_filtered = this.buttonContents;
-      this.buttons_filtered = this.buttons;
-      return;
-    }
-    var regex = new RegExp(filter, 'i');
-    this.buttonContents.forEach((content) => {
-      if(content.match(regex))
+      var prevQuery = this.queryStack[this.queryStack.length - 1];
+      this.queryStack.pop();
+      this.buttons_filtered = prevQuery[0];
+      this.buttonContents_filtered = prevQuery[1];
+    } else {  // Save the query state in the stack, and perform a filter, remove as many buttons as needed.
+      var removedButtons = this.buttons_filtered.length;
+      this.queryStack.push([this.buttons_filtered.slice(), this.buttonContents_filtered.slice()]);
+
+      this.buttonContents_filtered = this.buttonContents_filtered.filter(c => c.match(new RegExp(filter, "i")))
+    
+      removedButtons -= this.buttonContents_filtered.length;
+      for(var i = 0; i < removedButtons; i++)
       {
-        this.buttonContents_filtered.push(content);
-        this.buttons_filtered.push(new LinkButtonComponent());
+        this.buttons_filtered.pop();
       }
-    })
+    }
+    this.prevFilter = filter;
   }
+
 }
 
 interface WikiArticle{
