@@ -1,6 +1,6 @@
 <table *ngIf="CurrentArticle">
     <thead>
-        {{CurrentArticle}}
+        Current Article: {{CurrentArticle}}
     </thead>
     <tbody>
         <input type="text" placeholder="Filter results" (input)="FilterLinks($event.target.value)" #filterInput>

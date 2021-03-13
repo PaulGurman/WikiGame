@@ -9,6 +9,7 @@ import { WikipediaService } from './wikipedia-service.service';
 import { HttpClientModule } from '@angular/common/http';
 import { GameDisplayComponent } from './game-display/game-display.component';
 import { EndGameDisplayComponent } from './end-game-display/end-game-display.component';
+import { ClientSocketService } from './client-socket.service';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,7 @@ import { EndGameDisplayComponent } from './end-game-display/end-game-display.com
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [WikipediaService],
+  providers: [WikipediaService, ClientSocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
